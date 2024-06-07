@@ -5,8 +5,7 @@ import models
 from database import get_db
 import pyd
 #модули для JWT токена
-"""import auth_utils
-from config import TokenInfo"""
+import auth_utils
 
 router = APIRouter(
     prefix="/song",

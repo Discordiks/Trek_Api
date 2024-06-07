@@ -15,14 +15,25 @@ class PlaylistBase(BaseModel):
     class Config:
         orm_mode=True 
 
+class ArtistBase(BaseModel):
+    id:int=Field(...,gt=0,example=28) 
+    name:str=Field(...,example="РОКЭНРОЛЛ")
+    birthday:date = Field(..., example='2001-01-01')
+
+    class Config:
+        orm_mode=True 
+
 class UserBase(BaseModel):
     id:int=Field(...,gt=0,example=228) 
-    name:str=Field(...,example="Lil Peep")
     mail:EmailStr = Field(...,example="lil_peep@mail.ru")
     created_at:datetime=Field(...,example='2001-01-01 00:00:00')
 
     class Config:
         orm_mode=True 
+
+class TokenInfo(BaseModel):
+    access_token:str
+    token_type:str
 
 class SongBase(BaseModel):
     id:int=Field(...,gt=0,example=228)

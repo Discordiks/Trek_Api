@@ -20,7 +20,7 @@ async def get_genres(db:Session=Depends(get_db)):
 
 #добавление жанров
 @router.post('/', response_model=pyd.GenreBase)
-async def create_genres(genre_input:pyd.GenreCreate, db:Session=Depends(get_db)):
+async def create_genres(genre_input:pyd.GenreCreate, db:Session=Depends(get_db), payload:dict=Depends(auth_utils.auth_wrapper)):
     genres_db=models.Genre()
     genres_db.name=genre_input.name
     db.add(genres_db)
@@ -29,7 +29,7 @@ async def create_genres(genre_input:pyd.GenreCreate, db:Session=Depends(get_db))
 
 #редактирование жанров
 @router.put('/{genre_id}', response_model=pyd.GenreBase)
-async def update_genres(genre_id:int, genre_input:pyd.GenreCreate, db:Session=Depends(get_db)):
+async def update_genres(genre_id:int, genre_input:pyd.GenreCreate, db:Session=Depends(get_db), payload:dict=Depends(auth_utils.auth_wrapper)):
     genre_db=db.query(models.Genre).filter(models.Genre.id==genre_id).first()
     if not genre_db:
         raise HTTPException(status_code=404, detail="Жанр не найден!")
@@ -39,7 +39,7 @@ async def update_genres(genre_id:int, genre_input:pyd.GenreCreate, db:Session=De
 
 #удаление жанров
 @router.delete('/{genre_id}')
-async def delete_genres(genre_id:int, db:Session=Depends(get_db)):
+async def delete_genres(genre_id:int, db:Session=Depends(get_db), payload:dict=Depends(auth_utils.auth_wrapper)):
     genre_db=db.query(models.Genre).filter(models.Genre.id==genre_id).first()
     if not genre_db:
         raise HTTPException(status_code=404, detail="Жанр не найден!")

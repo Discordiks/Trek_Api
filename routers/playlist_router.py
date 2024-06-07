@@ -29,7 +29,7 @@ async def create_playlists(playlist_input:pyd.PlaylistCreate, db:Session=Depends
 
 #редактирование плейлистов
 @router.put('/{playlist_id}', response_model=pyd.PlaylistBase)
-async def update_playlists(playlist_id:int, playlist_input:pyd.PlaylistCreate, db:Session=Depends(get_db)):
+async def update_playlists(playlist_id:int, playlist_input:pyd.PlaylistCreate, db:Session=Depends(get_db), payload:dict=Depends(auth_utils.auth_wrapper)):
     playlist_db=db.query(models.Playlist).filter(models.Playlist.id==playlist_id).first()
     if not playlist_db:
         raise HTTPException(status_code=404, detail="Плейлист не найден!")
@@ -39,7 +39,7 @@ async def update_playlists(playlist_id:int, playlist_input:pyd.PlaylistCreate, d
 
 #удаление плейлистов
 @router.delete('/{playlist_id}')
-async def delete_genres(playlist_id:int, db:Session=Depends(get_db)):
+async def delete_genres(playlist_id:int, db:Session=Depends(get_db), payload:dict=Depends(auth_utils.auth_wrapper)):
     playlist_db=db.query(models.Playlist).filter(models.Playlist.id==playlist_id).first()
     if not playlist_db:
         raise HTTPException(status_code=404, detail="Плейлист не найден!")

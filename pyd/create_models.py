@@ -20,4 +20,4 @@ class SongCreate(BaseModel):
     name:str=Field(...,max_length=255, min_length=1,example="Lil Peep")
     genre_id: List[int] = None #для добавления жанров через запятую
     playlist_id: List[int] = None 
-    user_id: List[int] = None 
+    artist_id: List[int] = None 

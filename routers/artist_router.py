@@ -22,7 +22,7 @@ async def get_artists(db:Session=Depends(get_db)):
 
 #добавление исполнителей
 @router.post('/', response_model=pyd.ArtistBase)
-async def create_artists(artist_input:pyd.ArtistCreate, db:Session=Depends(get_db)):
+async def create_artists(artist_input:pyd.ArtistCreate, db:Session=Depends(get_db), payload:dict=Depends(auth_utils.auth_wrapper)):
     artists_db=db.query(models.Artist).filter(models.Artist.name==artist_input.name).first()
     if artists_db:
         raise HTTPException(400, 'Никнейм занят!')
@@ -37,7 +37,7 @@ async def create_artists(artist_input:pyd.ArtistCreate, db:Session=Depends(get_d
 
 #редактирование исполнителей
 @router.put('/{artist_id}', response_model=pyd.ArtistBase)
-async def update_artists(artist_id:int, artist_input:pyd.ArtistCreate, db:Session=Depends(get_db)):
+async def update_artists(artist_id:int, artist_input:pyd.ArtistCreate, db:Session=Depends(get_db), payload:dict=Depends(auth_utils.auth_wrapper)):
     artists_db=db.query(models.Artist).filter(models.Artist.id==artist_id).first()
     if not artists_db:
         raise HTTPException(status_code=404, detail="Исполнитель не найден!")
@@ -55,7 +55,7 @@ async def update_artists(artist_id:int, artist_input:pyd.ArtistCreate, db:Sessio
 
 #удаление исполнителей
 @router.delete('/{artist_id}')
-async def delete_artists(artist_id:int, db:Session=Depends(get_db)):
+async def delete_artists(artist_id:int, db:Session=Depends(get_db), payload:dict=Depends(auth_utils.auth_wrapper)):
     artists_db=db.query(models.Artist).filter(models.Artist.id==artist_id).first()
     if not artists_db:
         raise HTTPException(status_code=404, detail="Исполнитель не найден!")
